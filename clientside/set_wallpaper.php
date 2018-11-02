@@ -6,15 +6,17 @@ $dir = '/Users/danilosantagata/Pictures/Wallpaper/';
 
 //Inhalt des Get-Requests als Array speichern
 $response = json_decode(file_get_contents($wallpaper_url), true);
-$url_array = $response[$resolution][$calendar_mode];
+$calendars = $response[$resolution];
 
 empty_wallpaper_folder();
 
 $i=0;
-foreach($url_array as $url){
-	$content = file_get_contents($url);
-	file_put_contents($dir. $i. 'png', $content);
-	$i++;	
+foreach($calendars as $calendar){
+	foreach($calendar as $url){
+		$content = file_get_contents($url);
+		file_put_contents($dir. $i. 'png', $content);
+		$i++;	
+	}
 }
 
 

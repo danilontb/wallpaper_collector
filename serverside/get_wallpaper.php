@@ -7,7 +7,7 @@ $month_word = strtolower(date('F'));
 $month = get_month_number();
 
 $url = "https://www.smashingmagazine.com/" . $year . "/" . $month . "/desktop-wallpaper-calendars-" . $month_word . "-" . $year . "/";
-$regex = "/http.*?.png/";
+$regex = "/http.*?.(png|jpg)/";
 
 $resolutions = [
     '1920x1440',
