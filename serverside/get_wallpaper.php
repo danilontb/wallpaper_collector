@@ -9,6 +9,7 @@ $month = get_month_number();
 $url = "https://www.smashingmagazine.com/" . $year . "/" . $month . "/desktop-wallpaper-calendars-" . $month_word . "-" . $year . "/";
 $regex = "/http.*?.(png|jpg)/";
 
+$prodoppler_path = '/srv/prodoppler/wallpaper/';
 $resolutions = [
     '1920x1440',
     '2560x1440'
@@ -23,22 +24,22 @@ $i = 0;
 $j = 0;
 $k = 0;
 
-empty_folder($resolutions);
+empty_folder($resolutions, $prodoppler_path);
 foreach ($resolutions as $resolution) {
     foreach ($urls as $url) {
         if (preg_match('/' . $resolution . '/', $url[0])) {
            // echo $url[0] . ' -- ';
             if (preg_match('/\/nocal\//', $url[0])) {
               //  echo $url[0] . ' || ';
-                create_folder_if_not_exists('/srv/proengine/proengine-backend/public/prodoppler/wallpaper/', $resolution . '/nocalendar');
-                download_remote_file($url[0], '/srv/proengine/proengine-backend/public/prodoppler/wallpaper/' . $resolution . '/nocalendar/' . $j . '.png');
+                create_folder_if_not_exists($prodoppler_path, $resolution . '/nocalendar');
+                download_remote_file($url[0], $prodoppler_path . $resolution . '/nocalendar/' . $j . '.png');
                 $j++;
             }
             else if(preg_match('/\/cal\//', $url[0])) {
                // echo $url[0] . ' ** ';
             //    echo $i . 'calendar '. $resolution . ' >< ' ;
-                create_folder_if_not_exists('/srv/proengine/proengine-backend/public/prodoppler/wallpaper/', $resolution . '/calendar');
-                download_remote_file($url[0], '/srv/proengine/proengine-backend/public/prodoppler/wallpaper/' . $resolution . '/calendar/' . $k . '.png');
+                create_folder_if_not_exists($prodoppler_path, $resolution . '/calendar');
+                download_remote_file($url[0], $prodoppler_path . $resolution . '/calendar/' . $k . '.png');
                 $k++;
             }
         }
@@ -60,14 +61,14 @@ function download_remote_file($file_url, $save_to) {
 /**
  * @param $resolutions
  */
-function empty_folder($resolutions) {
+function empty_folder($resolutions, $prodoppler_path) {
     $calendars = [
         'calendar',
         'nocalendar'
     ];
     foreach ($resolutions as $resolution) {
         foreach ($calendars as $calendar) {
-            $dir = '/srv/proengine/proengine-backend/public/prodoppler/wallpaper/' . $resolution . '/' . $calendar . '/';
+            $dir = $prodoppler_path . $resolution . '/' . $calendar . '/';
             foreach (glob($dir . '*.*') as $v) {
                 unlink($v);
             }
